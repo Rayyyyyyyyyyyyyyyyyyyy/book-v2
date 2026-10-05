@@ -1,0 +1,63 @@
+name: Deploy manuscript reader to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "manuscript/**"
+      - "reader/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      pages-enabled: ${{ steps.pages.outputs.enabled }}
+    steps:
+      - name: Check Pages configuration
+        id: pages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh api "repos/${GITHUB_REPOSITORY}/pages" --jq .build_type | grep -qx workflow; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "Pages is not configured for Actions; build the reader artifact only."
+          fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: reader/package-lock.json
+      - name: Install reader dependencies
+        run: npm ci
+        working-directory: reader
+      - name: Build reader
+        run: npm run build
+        working-directory: reader
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: reader/dist
+  deploy:
+    needs: build
+    if: needs.build.outputs.pages-enabled == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

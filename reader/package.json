@@ -1,0 +1,14 @@
+{
+  "name": "book-v2-reader",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/manuscript-reader.mjs --build",
+    "reader": "node scripts/manuscript-reader.mjs --serve",
+    "reader:phone": "node scripts/manuscript-reader.mjs --serve --phone"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "6.3.11"
+  }
+}
