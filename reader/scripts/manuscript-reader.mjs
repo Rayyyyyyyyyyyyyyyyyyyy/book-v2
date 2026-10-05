@@ -13,6 +13,8 @@ const outputDir = join(projectRoot, "reader/dist");
 const outputFile = join(outputDir, "index.html");
 const serviceWorkerFile = join(outputDir, "sw.js");
 const templateFile = join(scriptDir, "manuscript-reader-template.html");
+const faviconFile = join(projectRoot, "reader/assets/favicon.ico");
+const faviconSvgFile = join(projectRoot, "reader/assets/favicon.svg");
 const port = Number.parseInt(process.env.READER_PORT ?? "4178", 10);
 const host = process.argv.includes("--phone") ? "0.0.0.0" : "127.0.0.1";
 
@@ -123,6 +125,8 @@ async function buildReader() {
 
   await mkdir(outputDir, { recursive: true });
   await writeFile(outputFile, page, "utf8");
+  await writeFile(join(outputDir, "favicon.ico"), await readFile(faviconFile));
+  await writeFile(join(outputDir, "favicon.svg"), await readFile(faviconSvgFile));
   const version = createHash("sha256").update(page).digest("hex").slice(0, 12);
   const serviceWorker = `const CACHE = "rui-xuan-manuscript-${version}";
 self.addEventListener("install", (event) => {
@@ -152,7 +156,19 @@ console.log(`閱讀器已產生：${result.sourceCount} 份來源稿件，${resu
 if (process.argv.includes("--serve")) {
   const html = await readFile(outputFile);
   const serviceWorker = await readFile(serviceWorkerFile);
+  const favicon = await readFile(join(outputDir, "favicon.ico"));
+  const faviconSvg = await readFile(join(outputDir, "favicon.svg"));
   const server = createServer((request, response) => {
+    if (request.url === "/favicon.svg") {
+      response.writeHead(200, { "Content-Type": "image/svg+xml" });
+      response.end(faviconSvg);
+      return;
+    }
+    if (request.url === "/favicon.ico") {
+      response.writeHead(200, { "Content-Type": "image/x-icon" });
+      response.end(favicon);
+      return;
+    }
     if (request.url === "/sw.js") {
       response.writeHead(200, {
         "Content-Type": "text/javascript; charset=utf-8",
