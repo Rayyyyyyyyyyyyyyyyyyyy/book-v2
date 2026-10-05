@@ -10,6 +10,8 @@
 
 ## 閱讀器
 
+線上閱讀：[《喔！這裡還有一點》](https://rayyyyyyyyyyyyyyyyyyyy.github.io/book-v2/)。GitHub Pages 使用 Actions 部署，`main` 的正文、閱讀器或部署 workflow 更新後會自動重建。
+
 ```bash
 cd reader
 npm ci

@@ -1,12 +1,14 @@
 # 交接｜book-reader repo 與 book-v2 現況
 
-文件更新：2026-10-05（repo 與 skills 分拆、正式書名與六篇章名定案、文件入口同步）。最新正文核准紀錄：2026-10-01，第十三至十五篇現稿已獲作者「好喔都ok」整章核准；全書十六篇目前正文均已核准。
+文件更新：2026-10-05（repo 與 skills 分拆、正式書名與六篇章名定案、文件入口同步、GitHub Pages 啟用）。最新正文核准紀錄：2026-10-01，第十三至十五篇現稿已獲作者「好喔都ok」整章核准；全書十六篇目前正文均已核准。
 
 本檔只回答「現在是什麼、已知風險是什麼、下一步是什麼」。逐輪處理過程看 Git history；規則原因看 `docs/decisions/`；研究材料看 `docs/research/`。接手時仍先讀 `AGENTS.md`、`CLAUDE.md` 與 [book-v2-workflow.md](book-v2-workflow.md)。
 
 ## Repo 與發布狀態
 
 2026-10-05 已拆為獨立書稿 repo `/Users/ray.shao/book-v2/`。本 repo 只維護《喔！這裡還有一點》、修訂流程及閱讀器；讀書心得與「百冊」網站留在原 repo。路徑與歷史來源見 [repo 分拆記錄](repo-split.md)。
+
+分拆內容已提交為 `9bd059e` 並推送至 `origin/main`。作者後續要求發布閱讀器，GitHub Pages 已設定為 GitHub Actions；線上入口為 [《喔！這裡還有一點》](https://rayyyyyyyyyyyyyyyyyyyy.github.io/book-v2/)。正文、閱讀器或部署 workflow 更新後會自動重建；分拆記錄中的 Pages 未啟用敘述保留當時狀態。
 
 正文在 `manuscript/`，章卡在 `docs/chapter-v2/`，原始與人物素材在 `materials/`、`docs/my-story/`；閱讀器在 `reader/`，只讀十六篇 `NN-*.md`。下列字數、核准與回饋都指本 repo 的正文。
 
